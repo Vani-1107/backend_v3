@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 require("dotenv").config();
 const fileUpload = require("./routes/fileUpload")
 const becomePartner = require("./routes/becomePartner")
+const blogs = require("./routes/blogs");
 const PORT = process.env.PORT || 5000;
 
 
@@ -20,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/', fileUpload)
 app.use("/api/", becomePartner);
-
+app.use("/api",blogs);
 
 
 app.listen(PORT, () => {
