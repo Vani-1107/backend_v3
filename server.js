@@ -13,14 +13,14 @@ const menu = require("./routes/menu");
 const restaurantLogin  = require('./routes/restaurantLogin');
 const user= require('./routes/userProfile');
 const restaurantRecommendation = require('./routes/restaurantRecommendation');
+const menuRecommendation = require('./routes/menuRecommendation');
+const comments = require('./routes/comment');
 
 const PORT = process.env.PORT || 5000;
-
 
 //database connect
 
 dbconnect();
-
 
 app.use(cors());
 app.use(express.json());
@@ -31,8 +31,9 @@ app.use('/api',category);
 app.use('/api',menu);
 app.use('/api',restaurantLogin);
 app.use('/api',user);
-// app.use('/api',userProfile);
 app.use('/api',restaurantRecommendation);
+app.use('/api',menuRecommendation);
+app.use('/api',comments);
 
 app.listen(PORT, () => {
   console.log(`App is running at ${PORT}`);
