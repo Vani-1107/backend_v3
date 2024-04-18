@@ -2,12 +2,14 @@
 const express = require("express");
 const router = express.Router();
 
-// Import the controller function for handling become partner data
+// Import the controller functions for handling become partner data
 const {
   becomePartnerDataToDB,
+  getAllBecomePartners,
 } = require("../controllers/becomePartner");
 
-// Define the route to handle POST requests to save become partner data
+// Define the routes
 router.post("/becomepartner", becomePartnerDataToDB);
+router.get("/becomepartner", getAllBecomePartners);
 
 module.exports = router;

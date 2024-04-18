@@ -16,7 +16,7 @@ const blogsSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now(),
-      }
+    }
 });
 
 const blogs = mongoose.model("blog", blogsSchema);
