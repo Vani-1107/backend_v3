@@ -41,6 +41,12 @@ const menuItem = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "userProfile",
         }
+    ],
+    comments : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "comments",
+        }
     ]
 });
 
