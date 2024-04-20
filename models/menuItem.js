@@ -47,7 +47,23 @@ const menuItem = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "comments",
         }
-    ]
+    ],
+    rated: {
+        type:Number,
+        default : 0,
+    },
+    mustTryCount : {
+        type:Number,
+        default : 0,
+    },
+    likedCount : {
+        type:Number,
+        default : 0,
+    },
+    notLikedCount : {
+        type:Number,
+        default : 0,
+    }
 });
 
 const menu = mongoose.model("menuItem", menuItem);

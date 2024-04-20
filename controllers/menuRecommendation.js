@@ -26,6 +26,16 @@ const updateRating = async (req, res) => {
             menu[rated].push(userId);
         }
 
+        menu.mustTryCount = menu.mustTry.length;
+        menu.likedCount = menu.liked.length;
+        menu.notLikedCount = menu.notLiked.length;
+
+        // menu.rated = (menu.mustTryCount + menu.likedCount)/2;
+
+        const averageRating = Math.round((menu.mustTryCount + menu.likedCount) / 2);
+
+        menu.rated = averageRating;
+        
         await menu.save();
 
         res.status(200).json({ 

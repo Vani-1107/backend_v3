@@ -1,8 +1,10 @@
 const categoryModel = require('../models/category');
 const menuItem = require('../models/menuItem');
+const restaurantDetails = require('../models/restaurantDetails');
 
 const addMenu = async (req, res) => {
     try {
+        const { id } = req.params;
         const { name, description, price, veg, category } = req.body;
 
         const newMenu = new menuItem({
@@ -21,10 +23,17 @@ const addMenu = async (req, res) => {
             { new: true } 
         );
 
+        const updatedResDetails = await restaurantDetails.findByIdAndUpdate(
+            id,
+            { $push: { menu: savedMenu._id } },
+            { new: true } 
+        );
+
         res.status(201).json({ 
             message: "Menu added successfully",
             menu: savedMenu ,
-            updatedCategory : updatedCategory
+            updatedCategory : updatedCategory,
+            updatedRestaurantDetails : updatedResDetails,
         });
     } catch (error) {
         console.error("Error adding menu:", error);
@@ -87,4 +96,68 @@ const updateMenu = async (req, res) => {
     }
 };
 
-module.exports = { addMenu,toggleMenuStatus,updateMenu };
+const getMenuByCategory = async(req,res) => {
+    try{
+        const {id} = req.params;
+
+        const category = await categoryModel.findById(id).populate('menuItems').exec();
+
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json({ category });
+    } catch(error) {
+        console.error('Error fetching category details:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const getMenuById = async(req,res) => {
+    try {
+        const menuId = req.params.id;
+
+        const menu = await menuItem.findById(menuId).populate('comments');
+
+        if (!menu) {
+            return res.status(404).json({ 
+                message: 'Menu item not found' 
+            });
+        }
+
+        res.status(200).json({
+            message : "Menu fetched successfully",
+            menu
+        });
+    } catch (error) {
+        console.error('Error fetching menu item details:', error);
+        res.status(500).json({ 
+            message: 'Internal server error' 
+        });
+    }
+};
+
+const searchMenu = async(req,res) => {
+    try{
+        const { restaurantId } = req.params;
+        const searchValue = req.params.search; 
+
+        const restaurant = await restaurantDetails.findById(restaurantId).populate('menu');
+
+        if (!restaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+
+        const matchedMenuItems = restaurant.menu.filter(menuItem => {
+            return menuItem.name.toLowerCase().includes(searchValue.toLowerCase());
+        });
+
+        res.json({ menuItems: matchedMenuItems });
+
+    } catch(error) { 
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+module.exports = { addMenu,toggleMenuStatus,updateMenu,getMenuByCategory,getMenuById,searchMenu };

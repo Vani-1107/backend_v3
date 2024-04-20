@@ -82,4 +82,30 @@ const login = async(req,res) => {
         });
     }
 }
-module.exports = { registerRestaurant,login };
+
+const getRestaurantDetailsById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const restaurant = await restaurantDetails.findById(id).populate('category').populate('menu');
+
+        if (!restaurant) {
+            return res.status(404).json({ 
+                message: 'Restaurant details not found' 
+            });
+        }
+
+        res.status(200).json({ 
+            message : 'Data fetched successfully',
+            restaurant
+         });
+
+    } catch (error) {
+        console.error('Error fetching restaurant details:', error);
+        res.status(500).json({ 
+            message: 'Internal server error' 
+        });
+    }
+};
+
+module.exports = { registerRestaurant,login,getRestaurantDetailsById };
