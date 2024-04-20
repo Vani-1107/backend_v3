@@ -5,10 +5,11 @@ const restaurantDetails = require('../models/restaurantDetails');
 const addMenu = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description, price, veg, category } = req.body;
+        const { name,image, description, price, veg, category } = req.body;
 
         const newMenu = new menuItem({
             name,
+            image,
             description,
             price,
             veg,
