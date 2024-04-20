@@ -20,7 +20,8 @@ const addCategory = async (req, res) => {
 
         res.status(201).json({ 
             message: "Category added successfully",
-            updatedDetails : updatedDetails
+            updatedDetails : updatedDetails,
+            category : savedCategory,
         });
 
     } catch (error) {

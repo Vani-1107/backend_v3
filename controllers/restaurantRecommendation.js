@@ -14,8 +14,12 @@ const toggleRecommendation =  async(req,res) => {
         } else {
             restaurant.recommendedBy.push(userId);
         }
-        await restaurant.save();
 
+        const count = restaurant.recommendedBy.length;
+
+        restaurant.recommendationCount = count;
+
+        await restaurant.save();
 
         const user = await userProfile.findById(userId);
 

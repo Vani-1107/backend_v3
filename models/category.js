@@ -4,10 +4,10 @@ const category = new mongoose.Schema({
     name : {
        type:String, 
     },
-    menuItems : {
+    menuItems : [{
         type: mongoose.Schema.Types.ObjectId,
         ref : "menuItem",
-    },
+    }],
     active : {
         type: Boolean,
         default : true,
