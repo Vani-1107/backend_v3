@@ -2,14 +2,17 @@ const userProfile = require('../models/userProfile');
 
 const addUser = async(req,res) => {
     try {
-        const { name, gender, contact, email, dob } = req.body;
+        const { profileImage, fullName, gender, contact, email, dob ,foodPreference, anniversary } = req.body;
 
         const newUser = new userProfile({
-            name,
+            profileImage,
+            name : fullName,
             gender,
             contact,
             email,
-            dob
+            dob,
+            foodPreference,
+            anniversary,
         });
 
         const savedUser = await newUser.save();
@@ -26,4 +29,32 @@ const addUser = async(req,res) => {
     }
 };
 
-module.exports = { addUser };
+
+const checkContactExists = async (req, res) => {
+    try {
+        const { phoneNumber } = req.params;
+
+        const user = await userProfile.findOne({ contact: phoneNumber });
+
+        if (user) {
+            return res.status(201).json({ 
+                exists: true, 
+                message: 'Contact exists',
+                data:user, 
+            });
+        } else {
+            return res.status(201).json({ 
+                exists: false, 
+                message: 'Contact does not exist',
+                data:user,
+        });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ 
+            error: 'Internal server error' 
+        });
+    }
+};
+
+module.exports = { addUser,checkContactExists };
