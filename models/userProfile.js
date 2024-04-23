@@ -5,6 +5,9 @@ const userProfile = new mongoose.Schema({
         type: String,
         required :true,
     },
+    profileImage : {
+        type:String,
+    },
     gender : {
         type: String,
         required : true,
@@ -18,6 +21,12 @@ const userProfile = new mongoose.Schema({
         required : true,
     },
     dob : {
+        type: String,
+    },
+    foodPreference : {
+        type: String,
+    },
+    anniversary : {
         type: String,
     },
     recommendedRestaurants : [{

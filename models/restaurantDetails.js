@@ -6,6 +6,9 @@ const restaurantDetails = new Schema({
         type: String,
         required: true,
     },
+    image : {
+        type:String,
+    },
     contact: {
         type: String,
         required: true,
