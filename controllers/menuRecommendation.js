@@ -20,9 +20,7 @@ const updateRating = async (req, res) => {
         }
 
         const index = menu[rated].indexOf(userId);
-        if (index !== -1) {
-            menu[rated].splice(index, 1);
-        } else {
+        if (index == -1) {
             menu[rated].push(userId);
         }
 
