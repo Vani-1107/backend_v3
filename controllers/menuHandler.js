@@ -1,7 +1,7 @@
 const categoryModel = require('../models/category');
 const menuItem = require('../models/menuItem');
 const restaurantDetails = require('../models/restaurantDetails');
-
+const comments = require('../models/comments');
 const addMenu = async (req, res) => {
     try {
         const { id } = req.params;
@@ -126,6 +126,10 @@ const getMenuById = async(req,res) => {
             });
         }
 
+        await Promise.all(menu.comments.map(async (menuId, index) => {
+            menu.comments[index] = await comments.findById(menuId._id).populate('userId');
+        }));
+
         res.status(200).json({
             message : "Menu fetched successfully",
             menu
@@ -161,4 +165,25 @@ const searchMenu = async(req,res) => {
     }
 };
 
-module.exports = { addMenu,toggleMenuStatus,updateMenu,getMenuByCategory,getMenuById,searchMenu };
+const getTop5 = async(req,res) => {
+    try {
+        const restaurantId = req.params.id;
+
+        const restaurant = await restaurantDetails.findById(restaurantId);
+
+        if (!restaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+
+        const menuItems = await menuItem.find({ _id: { $in: restaurant.menu } })
+                                       .sort({ rated: -1 })
+                                       .limit(5);
+
+        res.status(200).json(menuItems);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { addMenu,toggleMenuStatus,updateMenu,getMenuByCategory,getMenuById,searchMenu,getTop5 };
